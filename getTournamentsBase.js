@@ -25,10 +25,18 @@ const puppeteer = require('puppeteer');
 
         let tournamentDetails = {
           name: '',
+          country: '',
           id: ''
         }
         tournamentDetails.id = document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerHTML.substring(document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerHTML.indexOf('ID=') + 3, document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerHTML.indexOf('ID=') + 7)
-        tournamentDetails.name = document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerText
+
+        let str = document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerHTML.substring(document.querySelectorAll('tr')[i])
+
+        let commaLocation = str.indexOf(',')
+        let closeLocation = str.indexOf('>')
+        tournamentDetails.country = str.substring(commaLocation + 2)
+
+        tournamentDetails.name = str.substring(closeLocation + 1, commaLocation - 4)
 
         yearsTournaments.push(tournamentDetails)
 
@@ -57,9 +65,11 @@ const puppeteer = require('puppeteer');
     function tournament(tournament) {
       console.log(tournament.name)
       console.log(tournament.id)
+      console.log(tournament.country)
       console.log(season[0])
-      db.tournament.insert({
+      db.tournaments.insert({
         name: tournament.name,
+        country: tournament.country,
         bviId: tournament.id,
         tournamentYear: season[0]
       })
