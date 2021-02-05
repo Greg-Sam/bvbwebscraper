@@ -1,8 +1,8 @@
 const router = require('express').Router()
 const { Tournament } = require('../models')
 
-router.get('/tournaments/year/:year', (req, res) => {
-  Tournament.find({ 'tournamentYear': req.params.year })
+router.get('/tournaments/season/:season', (req, res) => {
+  Tournament.find({ 'season': req.params.season })
     .then(tournaments => res.json(tournaments))
     .catch(err => console.log(err))
 })

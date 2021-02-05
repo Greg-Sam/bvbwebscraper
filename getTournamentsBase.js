@@ -5,28 +5,29 @@ const puppeteer = require('puppeteer');
 (async () => {
 
   let allTournaments = []
-  let year = 2020
-  for (let y = year; y >= 2000; y--) {
-    let activeYear = y
-    let yearUrl = `http://bvbinfo.com/Season.asp?AssocID=3&Year=${y}`
+  let season = 2020
+  for (let s = season; s >= 2000; s--) {
+    let activeseason = s
+    let seasonUrl = `http://bvbinfo.com/Season.asp?AssocID=3&year=${s}`
     let browser = await puppeteer.launch()
     let page = await browser.newPage()
 
 
-    await page.goto(yearUrl, { waitUntil: 'networkidle2' })
+    await page.goto(seasonUrl, { waitUntil: 'networkidle2' })
 
 
     let tourneyData = await page.evaluate(() => {
       let url = window.location.href
-      let year = url.substring(url.length - 4)
-      let yearsTournaments = []
+      let season = url.substring(url.length - 4)
+      let seasonsTournaments = []
       let locator = document.querySelectorAll('tr').length
       for (let i = 10; i < locator - 4; i++) {
 
         let tournamentDetails = {
           name: '',
           country: '',
-          id: ''
+          id: '',
+          gender: ''
         }
         tournamentDetails.id = document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerHTML.substring(document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerHTML.indexOf('ID=') + 3, document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerHTML.indexOf('ID=') + 7)
 
@@ -37,16 +38,17 @@ const puppeteer = require('puppeteer');
         tournamentDetails.country = str.substring(commaLocation + 2)
 
         tournamentDetails.name = str.substring(closeLocation + 1, commaLocation - 4)
+        tournamentDetails.gender = document.querySelectorAll('tr')[i].querySelectorAll('td')[2].innerHTML
 
-        yearsTournaments.push(tournamentDetails)
+        seasonsTournaments.push(tournamentDetails)
 
 
       }
       let numberOfTournaments = locator - 14
       return [
-        year,
+        season,
         numberOfTournaments,
-        yearsTournaments
+        seasonsTournaments
       ]
 
     })
@@ -56,22 +58,25 @@ const puppeteer = require('puppeteer');
   }
   console.log(allTournaments[0][2][5].name)
 
-  allTournaments.map(season)
+  allTournaments.map(getSeason)
 
-  function season(season) {
-    console.log('tournament year...............................' + season[0])
+  function getSeason(season) {
+    console.log('season...............................' + season[0])
     season[2].map(tournament)
 
     function tournament(tournament) {
+      let seasonYear = parseInt(season[0])
       console.log(tournament.name)
       console.log(tournament.id)
       console.log(tournament.country)
-      console.log(season[0])
+      console.log(tournament.gender)
+      console.log(seasonYear)
       db.tournaments.insert({
         name: tournament.name,
         country: tournament.country,
         bviId: tournament.id,
-        tournamentYear: season[0]
+        gender: tournament.gender,
+        season: seasonYear
       })
     }
   }

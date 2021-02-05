@@ -4,58 +4,62 @@ const router = require('express').Router();
 
 
 (async () => {
-
-
   let bviIdArray = []
   let tournamentId = []
-  async function getTourneyData(y) {
-    await axios.get(`http://localhost:3000/api/tournaments/year/${y}`)
+  // return all tournament id's from beach_db
+  async function getTourneyData(s) {
+    await axios.get(`http://localhost:3000/api/tournaments/season/${s}`)
       .then(({ data }) => {
         for (let info of data) {
           bviIdArray.push(info.bviId)
         }
       })
   }
+  // puppeteer scraper
   async function scrape(url) {
     let browser = await puppeteer.launch()
     let page = await browser.newPage()
 
     await page.goto(url, { waitUntil: 'networkidle2' })
     let tourneyData = await page.evaluate(() => {
+      // webpages have two different shapes. This helps orient puppeteer for each page
+      let players = []
       let startRow = 0
       if (document.querySelectorAll('tr')[10].querySelector('td').innerText === 'News:') {
         startRow = 13
       } else {
         startRow = 12
       }
+
       let numOfTeams = document.querySelectorAll('tr').length - startRow - 4
-      let players = []
+      // getting tournament id from the url
       let url = window.location.href
       let equalLocation = url.indexOf('=')
       let tournamentId = url.substring(equalLocation + 1)
 
       for (let i = startRow; i < startRow + numOfTeams; i++) {
-        let indvPlayer = {
+        let team = {
           name: '',
           playerId: '',
           partner: '',
           partnerId: '',
           finish: '',
-          nationality: ''
+          nationality: '',
+          tournamentId: tournamentId
         }
-        indvPlayer.name = document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerText
+        team.name = document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerText
         let str = document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerHTML
         let closeLocation = str.indexOf('>')
         let idLocation = str.indexOf('ID')
-        indvPlayer.playerId = str.substring(idLocation + 3, closeLocation - 1)
-        indvPlayer.finish = i - startRow + 1
-        indvPlayer.partner = document.querySelectorAll('tr')[i].querySelectorAll('td')[2].innerText
-        let partnerStr = document.querySelectorAll('tr')[i].querySelectorAll('td')[2].innerHTML
+        team.playerId = str.substring(idLocation + 3, closeLocation - 1)
+        team.finish = i - startRow + 1
+        team.partner = document.querySelectorAll('tr')[i].querySelectorAll('td')[2].innerText
+        let partnerStr = document.querySelectorAll('tr')[i].querySelectorAll('td')[2].innerHTML 
         let partnerCloseLocation = partnerStr.indexOf('>')
         let partnerIdLocation = partnerStr.indexOf('ID')
-        indvPlayer.partnerId = partnerStr.substring(partnerIdLocation + 3, partnerCloseLocation - 1)
-        indvPlayer.nationality = document.querySelectorAll('tr')[i].querySelectorAll('td')[3].innerText
-        players.push(indvPlayer)
+        team.partnerId = partnerStr.substring(partnerIdLocation + 3, partnerCloseLocation - 1)
+        team.nationality = document.querySelectorAll('tr')[i].querySelectorAll('td')[3].innerText
+        players.push(team)
       }
       return [players, tournamentId]
     })
@@ -72,13 +76,15 @@ const router = require('express').Router();
         name: '',
         playerId: '',
         finish: '',
-        nationality: ''
+        nationality: '',
+        tournamentId: ''
       }
       let playerB = {
         name: '',
         playerId: '',
         finish: '',
-        nationality: ''
+        nationality: '',
+        tournamentId: ''
       }
       let finish= parseInt(array[i].finish)
       if (finish <= 4) {
@@ -102,19 +108,21 @@ const router = require('express').Router();
       playerA.Id = array[i].playerId
       playerA.finish = finish
       playerA.nationality = array[i].nationality
+      playerA.tournamentId = array[i].tournamentId
       playerB.name = array[i].partner
       playerB.Id = array[i].partnerId
       playerB.finish = finish
       playerB.nationality = array[i].nationality
+      playerB.tournamentId = array[i].tournamentId
 
       players.push(playerA)
       players.push(playerB)
     }
     return players
   }
-  let year = 2020
-  for (let y = year; y >= 2000; y--) {
-  await getTourneyData(y)
+  let season = 2020
+  for (let s = season; s >= 2017; s--) {
+  await getTourneyData(s)
   }
 
   for (let tournamentId of bviIdArray) {
