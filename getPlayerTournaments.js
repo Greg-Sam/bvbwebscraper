@@ -1,3 +1,4 @@
+
 const puppeteer = require('puppeteer');
 const axios = require('axios');
 const { all } = require('./routes/beachRoutes');
@@ -66,7 +67,8 @@ const router = require('express').Router();
         let partnerCloseLocation = partnerStr.indexOf('>')
         let partnerIdLocation = partnerStr.indexOf('ID')
         team.partnerId = partnerStr.substring(partnerIdLocation + 3, partnerCloseLocation - 1)
-        team.nationality = document.querySelectorAll('tr')[i].querySelectorAll('td')[3].innerText
+        nationality = document.querySelectorAll('tr')[i].querySelectorAll('td')[3].innerText
+        team.nationality = nationality
         team.seed = document.querySelectorAll('tr')[i].querySelectorAll('td')[4].innerText
         players.push(team)
       }
@@ -77,7 +79,8 @@ const router = require('express').Router();
 
     console.log(playerDataPrep(rawPlayerData))
     console.log(tourneyData[1])
-
+    // playerDataPrep(rawPlayerData)
+    // console.log(iso.whereAlpha2('vu'))
   }
 
 
@@ -85,14 +88,15 @@ const router = require('express').Router();
     let players = []
     let gender = ''
     let tournamentIdLookUp = parseInt(array[0].tournamentId)
- 
 
-    allTournamentData.forEach(tournament =>  {
+
+    allTournamentData.forEach(tournament => {
       if (tournament.bviId === array[0].tournamentId) {
         gender = tournament.gender
         tournamentName = tournament.name
+        tournamentCountry = tournament.country
       }
-      })
+    })
 
     for (let i = 0; i < array.length; i++) {
 
@@ -104,9 +108,11 @@ const router = require('express').Router();
         finish: '',
         nationality: '',
         tournamentName: '',
+        tournamentCountry: '',
         tournamentId: '',
         gender: '',
-        seed: ''
+        seed: '',
+        nationalityCode: ''
       }
       let playerB = {
         name: '',
@@ -116,6 +122,7 @@ const router = require('express').Router();
         finish: '',
         nationality: '',
         tournamentName: '',
+        tournamentCountry: '',
         tournamentId: '',
         gender: '',
         seed: ''
@@ -129,6 +136,7 @@ const router = require('express').Router();
       playerA.nationality = array[i].nationality
       playerA.tournamentId = tournamentIdLookUp
       playerA.tournamentName = tournamentName
+      playerA.tournamentCounrty = tournamentCountry
       playerA.gender = gender
       playerB.seed = seed
       playerB.name = array[i].partner
@@ -137,6 +145,7 @@ const router = require('express').Router();
       playerB.nationality = array[i].nationality
       playerB.tournamentId = tournamentIdLookUp
       playerB.tournamentName = tournamentName
+      playerB.tournamentCounrty = tournamentCountry
       playerB.gender = gender
       let findSpaceA = playerA.name.indexOf(' ')
       playerA.firstName = playerA.name.substring(0, findSpaceA)

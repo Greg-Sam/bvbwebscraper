@@ -12,7 +12,6 @@ const Tournament = new Schema({
   name: String,
   gender: String,
   nationality: String,
-  nationalityCode: String,
   // store birthDate as YYYYMMDD
   birthDate: {
     year: Number,
@@ -23,6 +22,7 @@ const Tournament = new Schema({
     {
       name: String,
       tournamentId: String,
+      tournamentCountry: String,
       // season Number refers to year (sometimes first tournament of a season is in the previous calender year)
       season: Number,
       date: {
