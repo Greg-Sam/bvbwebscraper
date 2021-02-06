@@ -6,7 +6,7 @@ const puppeteer = require('puppeteer');
 
   let allTournaments = []
   let season = 2020
-  for (let s = season; s >= 2000; s--) {
+  for (let s = season; s >= 2019; s--) {
     let activeseason = s
     let seasonUrl = `http://bvbinfo.com/Season.asp?AssocID=3&year=${s}`
     let browser = await puppeteer.launch()
@@ -29,7 +29,8 @@ const puppeteer = require('puppeteer');
           id: '',
           gender: ''
         }
-        tournamentDetails.id = document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerHTML.substring(document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerHTML.indexOf('ID=') + 3, document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerHTML.indexOf('ID=') + 7)
+        retrievedId = document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerHTML.substring(document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerHTML.indexOf('ID=') + 3, document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerHTML.indexOf('ID=') + 7)
+        tournamentDetails.id = parseInt(retrievedId)
 
         let str = document.querySelectorAll('tr')[i].querySelectorAll('td')[1].innerHTML.substring(document.querySelectorAll('tr')[i])
 

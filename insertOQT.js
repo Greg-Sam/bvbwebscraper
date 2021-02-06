@@ -7,3 +7,5 @@ db.tournaments.insert({
   gender: 'F',
   season: 2019
 })
+
+

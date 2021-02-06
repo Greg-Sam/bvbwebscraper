@@ -13,6 +13,12 @@ router.get('/tournaments', (req, res) => {
     .catch(err => console.log(err))
 })
 
+router.get('/tournaments/getOne/:bviId', (req, res) => {
+  Tournament.findOne({ bviId: req.params.bviId })
+    .then(tournaments => res.json(tournaments))
+    .catch(err => console.log(err))
+})
+
 
 
 
