@@ -67,6 +67,7 @@ const router = require('express').Router();
         let partnerIdLocation = partnerStr.indexOf('ID')
         team.partnerId = partnerStr.substring(partnerIdLocation + 3, partnerCloseLocation - 1)
         team.nationality = document.querySelectorAll('tr')[i].querySelectorAll('td')[3].innerText
+        team.seed = document.querySelectorAll('tr')[i].querySelectorAll('td')[4].innerText
         players.push(team)
       }
       return [players, tournamentId]
@@ -89,6 +90,7 @@ const router = require('express').Router();
     allTournamentData.forEach(tournament =>  {
       if (tournament.bviId === array[0].tournamentId) {
         gender = tournament.gender
+        tournamentName = tournament.name
       }
       })
 
@@ -101,8 +103,10 @@ const router = require('express').Router();
         playerId: '',
         finish: '',
         nationality: '',
+        tournamentName: '',
         tournamentId: '',
-        gender: ''
+        gender: '',
+        seed: ''
       }
       let playerB = {
         name: '',
@@ -111,21 +115,28 @@ const router = require('express').Router();
         playerId: '',
         finish: '',
         nationality: '',
+        tournamentName: '',
         tournamentId: '',
-        gender: ''
+        gender: '',
+        seed: ''
       }
       finish = parseInt(array[i].finish)
+      seed = array[i].seed
+      playerA.seed = seed
       playerA.name = array[i].name
       playerA.playerId = array[i].playerId
       playerA.finish = finish
       playerA.nationality = array[i].nationality
       playerA.tournamentId = tournamentIdLookUp
+      playerA.tournamentName = tournamentName
       playerA.gender = gender
+      playerB.seed = seed
       playerB.name = array[i].partner
       playerB.playerId = array[i].partnerId
       playerB.finish = finish
       playerB.nationality = array[i].nationality
       playerB.tournamentId = tournamentIdLookUp
+      playerB.tournamentName = tournamentName
       playerB.gender = gender
       let findSpaceA = playerA.name.indexOf(' ')
       playerA.firstName = playerA.name.substring(0, findSpaceA)
