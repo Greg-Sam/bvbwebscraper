@@ -184,11 +184,11 @@ const router = require('express').Router();
         .then((res) => {
           if (res.data[0] === undefined) {
             axios.post(`http://localhost:3000/api/player/tournamentfirst`, playerA)
-              .then(console.log('player created'))
+              .then(console.log(`${playerA.name} created in ${playerA.tournaments.tournamentName}`))
           }
           else {
             axios.put(`http://localhost:3000/api/player/tournamentpush`, playerA)
-            .then(console.log('player updated'))
+              .then(console.log(`${playerA.name} updated in ${playerA.tournaments.tournamentName}`))
           }
         }
         )
@@ -197,19 +197,19 @@ const router = require('express').Router();
         .then((res) => {
           if (res.data[0] === undefined) {
             axios.post(`http://localhost:3000/api/player/tournamentfirst`, playerB)
-              .then(console.log('player created'))
+              .then(console.log(`${playerB.name} created in ${playerA.tournaments.tournamentName}`))
           }
           else {
             axios.put(`http://localhost:3000/api/player/tournamentpush`, playerB)
-              .then(console.log('player updated'))
+              .then(console.log(`${playerB.name} updated in ${playerA.tournaments.tournamentName}`))
           }
         }
         )
     }
   }
 
-  let season = 2019
-  for (let s = season; s >= 2019; s--) {
+  let season = 2020
+  for (let s = season; s >= 2020; s--) {
     await getTourneyData(s)
   }
   for (let tournamentId of bviIdArray) {
