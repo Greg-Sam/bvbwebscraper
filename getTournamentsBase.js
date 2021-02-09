@@ -6,7 +6,7 @@ const puppeteer = require('puppeteer');
 
   let allTournaments = []
   let season = 2020
-  for (let s = season; s >= 2018; s--) {
+  for (let s = season; s >= 2000; s--) {
     let activeseason = s
     let seasonUrl = `http://bvbinfo.com/Season.asp?AssocID=3&year=${s}`
     let browser = await puppeteer.launch()

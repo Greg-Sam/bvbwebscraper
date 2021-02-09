@@ -23,7 +23,7 @@ const Player = new Schema({
   },
   tournaments: [
     {
-      name: String,
+      tournamentName: String,
       tournamentId: String,
       tournamentCountry: String,
       // season Number refers to year (sometimes first tournament of a season is in the previous calender year)

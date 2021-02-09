@@ -33,7 +33,7 @@ router.post("/player/tournamentfirst", (req, res) => {
 })
 
 router.put("/player/tournamentpush", (req, res) => {
-    Player.findOneAndUpdate({ playerId: req.body.playerId }, {$upsert: true}, { $push: { tournaments: req.body.tournaments } }, )
+    Player.findOneAndUpdate({ playerId: req.body.playerId }, { $push: { tournaments: req.body.tournaments } }, )
       .then(player => res.json(player))
       .catch(err => console.log(err))
 })

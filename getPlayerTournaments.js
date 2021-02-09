@@ -78,7 +78,7 @@ const router = require('express').Router();
     // await playerDataPrep(rawPlayerData)
 
     // console.log(playerDataPrep(rawPlayerData))
-    
+
     // console.log(tourneyData[1])
     playerDataPrep(rawPlayerData)
     // console.log(iso.whereAlpha2('vu'))
@@ -179,19 +179,33 @@ const router = require('express').Router();
       playerB.tournaments.season = season
       playerB.gender = gender
 
-
-console.log(playerA)
+     
       axios.get(`http://localhost:3000/api/player/find/${playerA.playerId}`)
-      .then((res) => 
-      {
-        if (res.data === null) {console.log('in db')}
-      else {console.log('not in db')}}
-      )
-      
-      players.push(playerA)
-      players.push(playerB)
+        .then((res) => {
+          if (res.data[0] === undefined) {
+            axios.post(`http://localhost:3000/api/player/tournamentfirst`, playerA)
+              .then(console.log('player created'))
+          }
+          else {
+            axios.put(`http://localhost:3000/api/player/tournamentpush`, playerA)
+            .then(console.log('player updated'))
+          }
+        }
+        )
+
+      axios.get(`http://localhost:3000/api/player/find/${playerB.playerId}`)
+        .then((res) => {
+          if (res.data[0] === undefined) {
+            axios.post(`http://localhost:3000/api/player/tournamentfirst`, playerB)
+              .then(console.log('player created'))
+          }
+          else {
+            axios.put(`http://localhost:3000/api/player/tournamentpush`, playerB)
+              .then(console.log('player updated'))
+          }
+        }
+        )
     }
-    return players
   }
 
   let season = 2019
