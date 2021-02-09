@@ -20,13 +20,13 @@ const Tournament = new Schema({
   },
   country: String,
   gender: String,
-  players: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Player'
-  }],
-  matches: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Match'
-  }]
+  // players: [{
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'Player'
+  // }],
+  // matches: [{
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'Match'
+  // }]
 }, { timestamps: true })
 module.exports = model('Tournament', Tournament)

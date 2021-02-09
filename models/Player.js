@@ -1,6 +1,6 @@
 const { model, Schema } = require('mongoose')
 
-const Tournament = new Schema({
+const Player = new Schema({
   firstName: {
     type: String,
     required: true
@@ -12,6 +12,9 @@ const Tournament = new Schema({
   name: String,
   gender: String,
   nationality: String,
+  playerId: {
+    type: String,
+    required: true},
   // store birthDate as YYYYMMDD
   birthDate: {
     year: Number,
@@ -31,16 +34,18 @@ const Tournament = new Schema({
         startDay: Number,
         endMonth: Number,
         endDay: Number
-      }
+      },
       finish: Number,
-      seed: Number,
-      partner: String,
-      partnerId: String,
+      seed: String,
+      partnerName: String,
+      partnerFirstName: String,
+      partnerLastName: String,
+      partnerBVId: String,
     }
-  ]
+  ],
   matches: [
     {
-      matchDate: Number
+      matchDate: Number,
       tournament: String,
       tournamentId: String,
       season: Number,
@@ -58,7 +63,7 @@ const Tournament = new Schema({
         opponentBId: String,
         opponentNationality: String,
         opponentNationalityCode: String
-      }
+      },
       result: {
         type: String,
         enum: ['Win', 'Loss']
@@ -78,11 +83,7 @@ const Tournament = new Schema({
       matchLength: Number,
       tournamentRound: String,
     }
-    }
   ]
-
-  
-
 }, { timestamps: true })
 
-module.exports = model('Tournament', Tournament)
+module.exports = model('Player', Player)

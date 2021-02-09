@@ -77,9 +77,10 @@ const router = require('express').Router();
     let rawPlayerData = tourneyData[0]
     // await playerDataPrep(rawPlayerData)
 
-    console.log(playerDataPrep(rawPlayerData))
-    console.log(tourneyData[1])
-    // playerDataPrep(rawPlayerData)
+    // console.log(playerDataPrep(rawPlayerData))
+    
+    // console.log(tourneyData[1])
+    playerDataPrep(rawPlayerData)
     // console.log(iso.whereAlpha2('vu'))
   }
 
@@ -95,6 +96,7 @@ const router = require('express').Router();
         gender = tournament.gender
         tournamentName = tournament.name
         tournamentCountry = tournament.country
+        season = tournament.season
       }
     })
 
@@ -104,58 +106,88 @@ const router = require('express').Router();
         name: '',
         firstName: '',
         lastName: '',
-        playerId: '',
-        finish: '',
-        nationality: '',
-        tournamentName: '',
-        tournamentCountry: '',
-        tournamentId: '',
         gender: '',
-        seed: '',
-        nationalityCode: ''
+        nationality: '',
+        playerId: '',
+        tournaments: {
+          tournamentName: '',
+          tournamentCountry: '',
+          tournamentId: '',
+          season: '',
+          finish: '',
+          seed: '',
+          partnerName: '',
+          partnerFirstName: '',
+          partnerLastName: '',
+          partnerBVId: ''
+        }
       }
       let playerB = {
         name: '',
         firstName: '',
         lastName: '',
-        playerId: '',
-        finish: '',
-        nationality: '',
-        tournamentName: '',
-        tournamentCountry: '',
-        tournamentId: '',
         gender: '',
-        seed: ''
+        nationality: '',
+        playerId: '',
+        tournaments: {
+          tournamentName: '',
+          tournamentCountry: '',
+          tournamentId: '',
+          season: '',
+          finish: '',
+          seed: '',
+          partnerName: '',
+          partnerFirstName: '',
+          partnerLastName: '',
+          partnerBVId: ''
+        }
       }
       finish = parseInt(array[i].finish)
       seed = array[i].seed
-      playerA.seed = seed
+      playerA.tournaments.seed = seed
       playerA.name = array[i].name
-      playerA.playerId = array[i].playerId
-      playerA.finish = finish
-      playerA.nationality = array[i].nationality
-      playerA.tournamentId = tournamentIdLookUp
-      playerA.tournamentName = tournamentName
-      playerA.tournamentCounrty = tournamentCountry
-      playerA.gender = gender
-      playerB.seed = seed
-      playerB.name = array[i].partner
-      playerB.playerId = array[i].partnerId
-      playerB.finish = finish
-      playerB.nationality = array[i].nationality
-      playerB.tournamentId = tournamentIdLookUp
-      playerB.tournamentName = tournamentName
-      playerB.tournamentCounrty = tournamentCountry
-      playerB.gender = gender
       let findSpaceA = playerA.name.indexOf(' ')
       playerA.firstName = playerA.name.substring(0, findSpaceA)
       playerA.lastName = playerA.name.substring(findSpaceA + 1)
-      let findSpaceB = playerB.name.indexOf(' ')
+      playerA.playerId = array[i].playerId
+      playerA.tournaments.partnerName = array[i].partner
+      let findSpaceB = array[i].partner.indexOf(' ')
+      playerA.tournaments.partnerFirstName = array[i].partner.substring(0, findSpaceB)
+      playerA.tournaments.partnerLastName = array[i].partner.substring(findSpaceB + 1)
+      playerA.tournaments.partnerBVId = array[i].partnerId
+      playerA.tournaments.finish = finish
+      playerA.nationality = array[i].nationality
+      playerA.tournaments.tournamentId = tournamentIdLookUp
+      playerA.tournaments.tournamentName = tournamentName
+      playerA.tournaments.tournamentCountry = tournamentCountry
+      playerA.tournaments.season = season
+      playerA.gender = gender
+      playerB.tournaments.seed = seed
+      playerB.name = array[i].partner
       playerB.firstName = playerB.name.substring(0, findSpaceB)
       playerB.lastName = playerB.name.substring(findSpaceB + 1)
+      playerB.playerId = array[i].partnerId
+      playerB.tournaments.partnerName = playerA.name
+      playerB.tournaments.partnerFirstName = playerA.firstName
+      playerB.tournaments.partnerLastName = playerA.lastName
+      playerB.tournaments.partnerBVId = playerA.playerId
+      playerB.tournaments.finish = finish
+      playerB.nationality = array[i].nationality
+      playerB.tournaments.tournamentId = tournamentIdLookUp
+      playerB.tournaments.tournamentName = tournamentName
+      playerB.tournaments.tournamentCountry = tournamentCountry
+      playerB.tournaments.season = season
+      playerB.gender = gender
 
 
-
+console.log(playerA)
+      axios.get(`http://localhost:3000/api/player/find/${playerA.playerId}`)
+      .then((res) => 
+      {
+        if (res.data === null) {console.log('in db')}
+      else {console.log('not in db')}}
+      )
+      
       players.push(playerA)
       players.push(playerB)
     }
