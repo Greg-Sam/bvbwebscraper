@@ -1,4 +1,3 @@
-
 const puppeteer = require('puppeteer');
 const axios = require('axios');
 const { all } = require('./routes/beachRoutes');
