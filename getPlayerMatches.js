@@ -34,21 +34,89 @@ const router = require('express').Router();
 
   // web scrape one tournament
   async function scrape(url) {
+
     let browser = await puppeteer.launch()
     let page = await browser.newPage()
     await page.goto(url, { waitUntil: 'networkidle2' })
+
     let tourneyData = await page.evaluate(() => {
-      let roundInfo = []
-      // find tournament part (Q, round, knockout...)
-      let tournamentParts = document.querySelectorAll('u').length
-      // extract data from each part of tournament
-      for (let i = 0; i < tournamentParts; i++) {
-        let tournamentSection = document.querySelectorAll('u')[i].innerText
-        roundInfo.push(tournamentSection)
+      // get all p tags on page
+      let matchContainer = ''
+      let count = document.querySelectorAll('tr').length
+      for (let i = 0; i < count; i++) {
+        document.querySelectorAll('tr')[i].querySelectorAll('p').length > 10 ?
+          matchContainer = document.querySelectorAll('tr')[i].innerHTML
+          :
+          console.log('continue does not work')
       }
-      return[tournamentParts, roundInfo]
+      let tournamentParts = []
+      const findParts = (string) => {
+        let working = string
+        while (working.indexOf('Header">') > 3) {
+          let start = working.indexOf('Header">')
+          let check = working.slice(start + 8)
+          let end = check.indexOf('Header">')
+          let part = check.slice(start, end - 38)
+          tournamentParts.push(part)
+          working = check.slice(end -37)
+        }
+      }
+      findParts(matchContainer)
+      return [matchContainer, tournamentParts]
     })
+
     console.log(tourneyData)
   }
-})
-  ()
+
+})()
+
+
+let matchInfo = {
+  superRound: '',
+  subRound: '',
+  playerAName: '',
+  playerAId: '',
+  playerBName: '',
+  playerBId: '',
+  playerCName: '',
+  playerCId: '',
+  playerDName: '',
+  playerDId: '',
+  playerANationality: '',
+  playerBNationality: '',
+  playerCNationality: '',
+  playerDNationality: '',
+  set1Team1Score: '',
+  set1Team2Score: '',
+  set2Team1Score: '',
+  set2Team2Score: '',
+  set3Team1Score: '',
+  set3Team2Score: ''
+}
+
+
+
+
+// // information that must come from the page
+// let allSuperRounds = []
+// let subRound = []
+
+// // find how many superRounds (Q, pool, knockout...) tournament has
+// let superRoundFinder = document.querySelectorAll('div').length
+// // get name of each superRound
+// for (let i = 0; i < superRoundFinder; i++) {
+  //   let superRounds = []
+  //   superRounds = document.querySelectorAll('div')[i].innerText
+  //   allSuperRounds.push(superRounds)
+  //   allSuperRounds.forEach(superRound => {
+    //     subRound.push(document.querySelectorAll('div')[i].nextElementSibling.nextElementSibling)
+    //     // if (document.querySelectorAll('div')[i].nextElementSibling.innerText.indexOf('Round') === -1) { 
+      //     //   subRound.push('none') 
+      //     // } else {
+        //     //   // while (document.querySelectorAll('div')[i].nextElementSibling !== '')
+        //     // subRound.push(document.querySelectorAll('div')[i].nextElementSibling.innerText.slice(0, 7))
+        //     // }
+        //   })
+        // }
+        // return [allSuperRounds, subRound]
+          // matchLenght: ''

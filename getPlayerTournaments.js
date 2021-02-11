@@ -178,7 +178,7 @@ const router = require('express').Router();
       playerB.tournaments.season = season
       playerB.gender = gender
 
-     
+
       axios.get(`http://localhost:3000/api/player/find/${playerA.playerId}`)
         .then((res) => {
           if (res.data[0] === undefined) {

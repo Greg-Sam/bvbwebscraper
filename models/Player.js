@@ -45,10 +45,10 @@ const Player = new Schema({
   ],
   matches: [
     {
-      matchDate: Number,
       tournament: String,
       tournamentId: String,
       season: Number,
+      round: String,
       date: {
         year: Number,
         month: Number,
@@ -81,7 +81,6 @@ const Player = new Schema({
         opponentScore: Number
       },
       matchLength: Number,
-      tournamentRound: String,
     }
   ]
 }, { timestamps: true })
