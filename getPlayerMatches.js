@@ -51,18 +51,23 @@ const router = require('express').Router();
       }
       let tournamentParts = []
       const findParts = (string) => {
-        let working = string
-        while (working.indexOf('Header">') > 3) {
-          let start = working.indexOf('Header">')
-          let check = working.slice(start + 8)
-          let end = check.indexOf('Header">')
-          let part = check.slice(start, end - 38)
-          tournamentParts.push(part)
-          working = check.slice(end -37)
-        }
+        let end = string.length
+        let cleanData = string.slice(0 , end)
+        tournamentParts.push(cleanData)
       }
+      // const findParts = (string) => {
+      //   let working = string
+      //   while (working.indexOf('Header">') > 3) {
+      //     let start = working.indexOf('Header">')
+      //     let check = working.slice(start + 8)
+      //     let end = check.indexOf('Header">')
+      //     let part = check.slice(start, end - 38)
+      //     tournamentParts.push(part)
+      //     working = check.slice(end - 37)
+      //   }
+      // }
       findParts(matchContainer)
-      return [matchContainer, tournamentParts]
+      return matchContainer
     })
 
     console.log(tourneyData)

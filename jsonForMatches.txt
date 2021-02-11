@@ -1,0 +1,29 @@
+{
+"tournament": "String",
+  "tournamentId": "String",
+  "season": 2020,
+  "round": "String",
+  "partner": "String",
+  "partnerId": "String",
+  "opponents": {
+    "opponentA": "String",
+    "opponentAId": "String",
+    "opponentB": "String",
+    "opponentBId": "String",
+    "opponentNationality": "String"
+  },
+  "result": "Win",
+  "set1Score": {
+    "score": 5,
+    "opponentScore": 4
+  },
+  "set2Score": {
+    "score": 21,
+    "opponentScore": 17
+  },
+  "set3Score": {
+    "score": 19,
+    "opponentScore": 21
+  },
+  "matchLength": 49
+}
