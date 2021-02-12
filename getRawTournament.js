@@ -6,9 +6,10 @@ const router = require('express').Router();
 (async () => {
   console.log('start')
   let bviIdArray = []
+  let tournamentArray = []
 
-  let season = 2020
-  for (let s = season; s >= 2020; s--) {
+  let season = 2019
+  for (let s = season; s >= 2019; s--) {
     await getTourneyData(s)
   }
 
@@ -19,6 +20,7 @@ const router = require('express').Router();
       .then(({ data }) => {
         for (let tournament of data) {
           bviIdArray.push(tournament.bviId)
+          tournamentArray.push(tournament)
           tournament = null
         }
       })
@@ -28,7 +30,7 @@ const router = require('express').Router();
   for (let tournamentId of bviIdArray) {
     let url = `http://bvbinfo.com/Tournament.asp?ID=${tournamentId}&Process=Matches`
     await scrape(url)
-    bviIdArray = null
+
   }
 
   // scrape one tournament
@@ -296,12 +298,20 @@ const router = require('express').Router();
     // }
     let rawTournament = {
       id: '',
+      name: '',
       raw: ''
     }
+    // console.log(bviIdArray)
     // console.log(tourneyData)
-    console.log(Id)
+    // console.log(tournamentArray)
+    
     rawTournament.id = Id
+    let getName = tournamentArray.filter(tournament => {
+      return tournament.bviId === Id
+    })
+     rawTournament.name = getName[0].name
     rawTournament.raw = tourneyData
+    console.log(rawTournament)
     axios.post(`http://localhost:3000/api/rawtournament`, rawTournament)
   }
 
