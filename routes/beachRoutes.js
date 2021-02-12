@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { Tournament, Player, Match } = require('../models')
+const { Tournament, Player, Match, RawTournament } = require('../models')
 
 router.get('/player/find/:playerId', (req, res) => {
   Player.find({ 'playerId': req.params.playerId })
@@ -41,6 +41,12 @@ router.put("/player/tournamentpush", (req, res) => {
 router.post("/match", (req, res) => {
   Match.create(req.body)
     .then(match => res.json(match))
+    .catch(err => console.log(err))
+})
+
+router.post("/rawtournament", (req, res) => {
+  RawTournament.create(req.body)
+    .then(player => res.json(player))
     .catch(err => console.log(err))
 })
 
