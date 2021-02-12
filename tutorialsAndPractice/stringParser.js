@@ -348,7 +348,7 @@ const matchGenerator = (tourneyData) => {
   // console.log(matchArray)
   matchArray.map(match => getMatchDetails(match))
 
-  console.log(everyMatch)
+  // console.log(everyMatch)
 }
 
 matchGenerator(working)

@@ -8,7 +8,7 @@ const router = require('express').Router();
   let bviIdArray = []
   let tournamentArray = []
 
-  let season = 2019
+  let season = 2020
   for (let s = season; s >= 2019; s--) {
     await getTourneyData(s)
   }
@@ -299,18 +299,23 @@ const router = require('express').Router();
     let rawTournament = {
       id: '',
       name: '',
+      country: '',
+      season: '',
       raw: ''
     }
     // console.log(bviIdArray)
     // console.log(tourneyData)
     // console.log(tournamentArray)
-    
+
     rawTournament.id = Id
-    let getName = tournamentArray.filter(tournament => {
+    let getRelevant = tournamentArray.filter(tournament => {
       return tournament.bviId === Id
     })
-     rawTournament.name = getName[0].name
+    rawTournament.country = getRelevant[0].country
+    rawTournament.name = getRelevant[0].name
     rawTournament.raw = tourneyData
+    rawTournament.season = getRelevant[0].season
+    
     console.log(rawTournament)
     axios.post(`http://localhost:3000/api/rawtournament`, rawTournament)
   }

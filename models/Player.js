@@ -28,13 +28,6 @@ const Player = new Schema({
       tournamentCountry: String,
       // season Number refers to year (sometimes first tournament of a season is in the previous calender year)
       season: Number,
-      date: {
-        year: Number,
-        startMonth: Number,
-        startDay: Number,
-        endMonth: Number,
-        endDay: Number
-      },
       finish: Number,
       seed: String,
       partnerName: String,
@@ -49,11 +42,6 @@ const Player = new Schema({
       tournamentId: String,
       season: Number,
       round: String,
-      date: {
-        year: Number,
-        month: Number,
-        day: Number
-      },
       partner: String,
       partnerId: String,
       opponents: {
@@ -68,19 +56,8 @@ const Player = new Schema({
         type: String,
         enum: ['Win', 'Loss']
       },
-      set1Score: {
-        score: Number,
-        opponentScore: Number
-      },
-      set2Score: {
-        score: Number,
-        opponentScore: Number
-      },
-      set3Score: {
-        score: Number,
-        opponentScore: Number
-      },
-      matchLength: Number,
+      score: String,
+      matchLength: String
     }
   ]
 }, { timestamps: true })

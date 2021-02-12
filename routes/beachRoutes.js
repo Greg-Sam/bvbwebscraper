@@ -38,10 +38,29 @@ router.put("/player/tournamentpush", (req, res) => {
       .catch(err => console.log(err))
 })
 
+router.delete('/player/delete/:playerId', (req, res) => {
+  Player.findOneAndDelete({ 'playerId': req.params.playerId })
+    .then(() => res.json('deleted'))
+    .catch(err => console.log(err))
+})
+
+router.put("/player/matchpush", (req, res) => {
+  Player.findOneAndUpdate({ playerId: req.body.playerId }, { $push: { matches: req.body.matches } },)
+    .then(player => res.json(player))
+    .catch(err => console.log(err))
+})
+
 router.post("/match", (req, res) => {
   Match.create(req.body)
     .then(match => res.json(match))
     .catch(err => console.log(err))
+})
+
+
+router.get('/rawtournaments/season/:season', (req, res) => {
+  RawTournament.find({ 'season': req.params.season })
+  .then(tournaments => res.json(tournaments))
+  .catch(err => console.log(err))
 })
 
 router.post("/rawtournament", (req, res) => {
@@ -49,5 +68,4 @@ router.post("/rawtournament", (req, res) => {
     .then(player => res.json(player))
     .catch(err => console.log(err))
 })
-
 module.exports = router
