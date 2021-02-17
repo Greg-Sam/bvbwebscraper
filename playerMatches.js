@@ -15,8 +15,8 @@ const loadTournament = (s) => {
     })
 }
 
-let season = 2020
-for (let s = season; s >= 2020; s--) {
+let season = 2019
+for (let s = season; s >= 2019; s--) {
   loadTournament(s)
 }
 
@@ -109,16 +109,23 @@ const matchGenerator = (tourneyData, id) => {
         let round1Start = part.indexOf('Round 1')
         let round1End = part.indexOf('</p><p>')
         let round1 = part.slice(round1Start, round1End)
+        let shorterSuperRound = part.slice(round1End +3)
         let roundNum = '17th Place Match'
+        // console.log(round1, '---------------------------------', roundNum)
         getMatches(round1, roundNum, superRound)
-        let round2Start = part.indexOf('Round 2')
-        let round2 = part.slice(round2Start)
+        // console.log(shorterSuperRound)
+        let round2Start = shorterSuperRound.indexOf('Round 2')
+        let round2End = shorterSuperRound.indexOf('</p><p>')
+        let round2 = shorterSuperRound.slice(round2Start, round2End)
+        shorterSuperRound = shorterSuperRound.slice(round2End)
         roundNum = '9th Place Match'
+        // console.log(round2, '---------------------------------', roundNum)
+
         getMatches(round2, roundNum, superRound)
-        let round3Start = part.indexOf('Round 3')
-        let round3 = part.slice(round3Start)
+        let round3Start = shorterSuperRound.indexOf('Round 3')
+        let round3 = shorterSuperRound.slice(round3Start)
         roundNum = '5th Place Match'
-        // console.log(round3)
+        // console.log(round3, '---------------------------------', roundNum)
         getMatches(round3, roundNum, superRound)
       }
     }
@@ -256,7 +263,7 @@ const playerMatchPrep = (matchGenerator, id) => {
         matchLength: match.matchLength
       }
     }
-    
+
     let playerB = {
       name: match.playerBName,
       playerId: match.playerBId,
@@ -280,7 +287,7 @@ const playerMatchPrep = (matchGenerator, id) => {
         matchLength: match.matchLength
       }
     }
-    
+
     let playerC = {
       name: match.playerCName,
       playerId: match.playerCId,
@@ -304,7 +311,7 @@ const playerMatchPrep = (matchGenerator, id) => {
         matchLength: match.matchLength
       }
     }
-    
+
     let playerD = {
       name: match.playerDName,
       playerId: match.playerDId,
@@ -328,6 +335,7 @@ const playerMatchPrep = (matchGenerator, id) => {
         matchLength: match.matchLength
       }
     }
+    // console.log(playerA)
     axios.put(`http://localhost:3000/api/player/matchpush`, playerA)
       .then(console.log(`${playerA.name} matches updated`))
 
@@ -339,4 +347,5 @@ const playerMatchPrep = (matchGenerator, id) => {
 
     axios.put(`http://localhost:3000/api/player/matchpush`, playerD)
       .then(console.log(`${playerD.name} matches updated`))
-  })}
+  })
+}

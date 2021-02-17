@@ -8,7 +8,7 @@ const router = require('express').Router();
   let bviIdArray = []
   let tournamentArray = []
 
-  let season = 2020
+  let season = 2019
   for (let s = season; s >= 2019; s--) {
     await getTourneyData(s)
   }

@@ -100,7 +100,7 @@ const router = require('express').Router();
     })
 
     for (let i = 0; i < array.length; i++) {
-
+console.log(array)
       let playerA = {
         name: '',
         firstName: '',
@@ -207,8 +207,8 @@ const router = require('express').Router();
     }
   }
 
-  let season = 2020
-  for (let s = season; s >= 2020; s--) {
+  let season = 2019
+  for (let s = season; s >= 2019; s--) {
     await getTourneyData(s)
   }
   for (let tournamentId of bviIdArray) {

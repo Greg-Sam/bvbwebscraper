@@ -46,7 +46,7 @@ router.delete('/player/delete/:playerId', (req, res) => {
 
 router.put("/player/matchpush", (req, res) => {
   Player.findOneAndUpdate({ playerId: req.body.playerId }, { $push: { matches: req.body.matches } },)
-    .then(player => res.json(player))
+    // .then(player => res.json(player))
     .catch(err => console.log(err))
 })
 
